@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Checkout and place your artisanal gelato order with Gelato Bliss.">
+  <title>Express Checkout | Gelato Bliss</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Nunito:wght@700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/screens.css">
+  <style>
+    .checkout-grid{display:grid;grid-template-columns:1fr 420px;gap:32px;align-items:start;margin-top:28px}.checkout-grid>*{min-width:0}
+    .checkout-box{background:var(--surface,#fff);border:1px solid var(--line,#e9eaf0);border-radius:24px;padding:32px;box-shadow:var(--shadow,0 14px 35px #1c244418)}
+    .checkout-box h2{font:900 24px "Nunito",sans-serif;margin:0 0 20px;color:var(--ink,#142039)}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.form-grid>*{min-width:0}
+    .form-grid .full{grid-column:1/-1}
+    .form-grid label{display:flex;flex-direction:column;gap:6px;font:800 13px "DM Sans",sans-serif;color:var(--ink,#142039)}
+    .form-grid input, .form-grid textarea, .form-grid select{padding:14px 16px;border:1px solid var(--line,#dce3ef);border-radius:14px;background:var(--surface,#fff);color:var(--ink,#142039);font:600 15px "DM Sans",sans-serif}
+    .payment-options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px}
+    .payment-opt{border:1px solid var(--line,#dce3ef);border-radius:14px;padding:14px;text-align:center;cursor:pointer;font:800 13px "Nunito",sans-serif;background:var(--soft,#fff7fb);transition:.2s}
+    .payment-opt.active{border-color:var(--pink,#f63886);background:#fff0f6;color:var(--pink,#f63886)}
+    .summary-list{display:flex;flex-direction:column;gap:12px;max-height:260px;overflow-y:auto;margin-bottom:20px;padding-right:4px}
+    .summary-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--soft,#fff7fb);border:1px solid var(--line,#e9eaf0);border-radius:14px}
+    .summary-item b{font:800 14px "Nunito",sans-serif;color:var(--ink,#142039)}
+    .summary-row{display:flex;justify-content:space-between;margin:8px 0;font:600 14px "DM Sans",sans-serif;color:var(--text,#536078)}
+    .summary-row.total{border-top:1px solid var(--line,#e9eaf0);padding-top:14px;margin-top:14px;font:900 22px "Nunito",sans-serif;color:var(--ink,#142039)}
+    .order-success-screen{text-align:center;padding:48px 24px;background:var(--surface,#fff);border:1px solid var(--line,#e9eaf0);border-radius:28px;box-shadow:0 20px 50px #10162d20;animation:toastSlideIn .4s ease-out}
+    .success-mark{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#0dab87,#12d3a6);color:#fff;font-size:42px;display:grid;place-items:center;margin:0 auto 20px;box-shadow:0 10px 25px #0dab8744}
+    @media(max-width:860px){.checkout-grid{grid-template-columns:1fr}}@media(max-width:520px){.form-grid,.payment-options{grid-template-columns:1fr}.checkout-box{padding:20px}}
+  </style>
+</head>
+<body class="reference-page">
+
+<header class="site-header">
+  <a class="logo" href="index.html">
+    <span class="logo-mark">♢</span>
+    <span>Gelato Bliss<small data-ar="صالة الحلويات الحرفية">ARTISANAL DESSERT PARLOUR</small></span>
+  </a>
+  <button class="menu-toggle" aria-label="Open navigation" data-ar-aria="فتح القائمة" aria-expanded="false">☰</button>
+  <nav class="main-nav" aria-label="Primary">
+    <a href="index.html" data-ar="الرئيسية">Home</a>
+    <a href="menu.html" data-ar="القائمة والنكهات">Menu &amp; Flavors</a>
+    <a href="services.html" data-ar="التموين والفعاليات">Catering &amp; Events</a>
+    <a href="about.html" data-ar="من نحن">About Us</a>
+    <a href="blog.html" data-ar="المدونة">Blog</a>
+    <a href="contact.html" data-ar="تواصل معنا">Contact</a>
+  <div class="nav-icon-row">
+    
+    <a class="icon-button admin-btn" href="dashboard.html" aria-label="Admin dashboard" data-ar-aria="لوحة تحكم المشرف"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="admin-label" data-ar="الإدارة">Admin</span></a>
+    <button class="icon-button rtl-toggle" aria-label="Switch to RTL" data-ar-aria="التبديل إلى العربية"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
+    <button class="icon-button theme-toggle" aria-label="Toggle theme" data-ar-aria="تبديل المظهر"><svg class="icon-svg icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg><svg class="icon-svg icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button>
+    <a class="icon-button" href="login.html" aria-label="Login" data-ar-aria="تسجيل الدخول"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a>
+    </div></nav>
+  <div class="header-actions">
+    
+    <a class="icon-button admin-btn" href="dashboard.html" aria-label="Admin dashboard" data-ar-aria="لوحة تحكم المشرف"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="admin-label" data-ar="الإدارة">Admin</span></a>
+    <button class="icon-button rtl-toggle" aria-label="Switch to RTL" data-ar-aria="التبديل إلى العربية"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
+    <button class="icon-button theme-toggle" aria-label="Toggle theme" data-ar-aria="تبديل المظهر"><svg class="icon-svg icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg><svg class="icon-svg icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button>
+    <a class="icon-button" href="login.html" aria-label="Login" data-ar-aria="تسجيل الدخول"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a>
+    <button class="cart icon-button" aria-label="Shopping cart" data-ar-aria="عربة التسوق"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg><b>0</b></button>
+  </div>
+</header>
+
+<main class="page-main">
+  <div class="page-intro" style="margin-bottom:12px">
+    <div>
+      <p class="kicker" data-ar="الدفع الآمن للحلويات">SECURE DESSERT CHECKOUT</p>
+      <h1 data-ar="أكمل طلبك الحرفي">Complete Your Artisanal Order</h1>
+    </div>
+  </div>
+
+  <div id="checkout-view" class="checkout-grid">
+    <form id="checkout-form" class="checkout-box">
+      <h2 data-ar="١. تفاصيل التوصيل والاتصال">1. Delivery &amp; Contact Details</h2>
+      <div class="form-grid">
+        <label><span data-ar="الاسم الكامل">Full Name</span> <input required placeholder="Sara Smith" data-ar-placeholder="سارة سميث"></label>
+        <label><span data-ar="رقم الهاتف">Phone Number</span> <input required type="tel" placeholder="+1 (555) 234-5678"></label>
+        <label class="full"><span data-ar="عنوان الشارع">Street Address</span> <input required placeholder="742 Evergreen Terrace, Suite 4B" data-ar-placeholder="٧٤٢ شارع إيفرجرين، جناح ٤ب"></label>
+        <label><span data-ar="المدينة">City</span> <input required placeholder="Dessert City" data-ar-placeholder="مدينة الحلويات"></label>
+        <label><span data-ar="الرمز البريدي">Postal Code</span> <input required placeholder="90210"></label>
+        <label class="full"><span data-ar="ملاحظات التوصيل (اختياري)">Delivery Notes (Optional)</span> <textarea rows="2" placeholder="Leave at doorstep / Ring doorbell..." data-ar-placeholder="اترك الطلب عند الباب / اقرع الجرس..."></textarea></label>
+      </div>
+
+      <h2 style="margin-top:32px" data-ar="٢. اختر طريقة الدفع">2. Select Payment Method</h2>
+      <div class="payment-options">
+        <div class="payment-opt active" data-method="card" data-ar="💳 بطاقة ائتمان">💳 Credit Card</div>
+        <div class="payment-opt" data-method="apple" data-ar="🍏 آبل / جوجل باي">🍏 Apple / Google Pay</div>
+        <div class="payment-opt" data-method="cod" data-ar="💵 الدفع عند الاستلام">💵 Cash on Delivery</div>
+      </div>
+
+      <button type="submit" class="btn btn-gradient full" style="margin-top:28px;padding:16px;font-size:16px" data-ar="🚀 تأكيد وإتمام الطلب الآن">
+        🚀 Confirm &amp; Place Order Now
+      </button>
+    </form>
+
+    <div class="checkout-box">
+      <h2 data-ar="ملخص الطلب">Order Summary</h2>
+      <div id="summary-items" class="summary-list"></div>
+
+      <div class="summary-row"><span data-ar="المجموع الفرعي">Subtotal</span><span id="chk-subtotal">$0.00</span></div>
+      <div class="summary-row"><span data-ar="التوصيل المحلي السريع">Express Local Delivery</span><span id="chk-delivery">$2.50</span></div>
+      <div class="summary-row"><span data-ar="الضرائب والخدمة (٨٪)">Taxes &amp; Service (8%)</span><span id="chk-tax">$0.00</span></div>
+      <div class="summary-row total"><span data-ar="المبلغ الإجمالي المستحق">Total Due</span><span id="chk-total">$0.00</span></div>
+    </div>
+  </div>
+
+  <div id="success-view" class="order-success-screen" hidden>
+    <div class="success-mark">✓</div>
+    <p class="kicker" style="color:#0dab87" data-ar="تم تأكيد الطلب وجاري التحضير">ORDER CONFIRMED &amp; PREPARING</p>
+    <h1 id="order-success-num" style="font:900 42px 'Nunito',sans-serif;margin:8px 0">Order #GB-8921 Placed Successfully!</h1>
+    <p style="font-size:16px;color:var(--text);max-width:560px;margin:0 auto 24px" data-ar="شكرًا لطلبك من جيلاتو بليس! يتم تحضير كراتك الحرفية طازجة وستصل إلى باب منزلك خلال ٢٥-٣٥ دقيقة تقريبًا.">
+      Thank you for ordering with Gelato Bliss! Your artisanal scoops are being fresh-churned and will arrive at your doorstep in approximately <strong>25–35 minutes</strong>.
+    </p>
+
+    <div style="background:var(--soft,#fff7fb);border:1px solid var(--line,#e9eaf0);border-radius:18px;max-width:480px;margin:0 auto 28px;padding:20px;text-align:left">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><b data-ar="التوصيل المتوقع:">Estimated Delivery:</b> <span style="color:var(--pink);font-weight:900" data-ar="٣٠ دقيقة">30 Mins</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><b data-ar="عنوان التوصيل:">Delivery Address:</b> <span id="rec-address">742 Evergreen Terrace</span></div>
+      <div style="display:flex;justify-content:space-between"><b data-ar="حالة الدفع:">Payment Status:</b> <span style="color:#0dab87;font-weight:900" data-ar="مدفوع ومعتمد ✓">Paid &amp; Approved ✓</span></div>
+    </div>
+
+    <a class="btn btn-gradient" href="index.html" data-ar="العودة إلى الصالة الرئيسية ←">Return to Main Parlour →</a>
+  </div>
+</main>
+
+<footer id="newsletter">
+  <div class="footer-brand">
+    <a class="logo" href="index.html"><span class="logo-mark">♢</span><span>Gelato Bliss<small data-ar="صالة الحلويات الحرفية">ARTISANAL DESSERT PARLOUR</small></span></a>
+    <p data-ar="نصنع يوميًا جيلاتو إيطاليًا أصيلًا بدفعات صغيرة وحلويات السنداي بمكونات عضوية محلية.">Handcrafting authentic, small-batch Italian gelato and sundae creations daily with organic local ingredients.</p>
+  </div>
+  <div>
+    <h4 data-ar="روابط سريعة">Quick Navigation</h4>
+    <a href="index.html" data-ar="الصالة الرئيسية">Main Parlour</a>
+    <a href="menu.html" data-ar="القائمة والنكهات">Menu &amp; Flavors</a>
+    <a href="services.html" data-ar="مركز الحفلات والتموين">Party &amp; Catering Hub</a>
+    <a href="about.html" data-ar="قصتنا وكبار الطهاة">Our Story &amp; Master Chefs</a>
+  </div>
+  <div>
+    <h4 data-ar="زوروا متجرنا ومواعيد العمل">Visit Store &amp; Hours</h4>
+    <p data-ar="٧٤٢ شارع سويت، حي الحلويات">742 Sweet Avenue, Dessert District</p>
+    <p>+1 (800) 555-GELATO</p>
+    <p data-ar="الإثنين - الأحد: ١٠:٠٠ صباحًا - ١١:٣٠ مساءً">Mon–Sun: 10:00 AM – 11:30 PM</p>
+  </div>
+  <div>
+    <h4 data-ar="احصل على قسائم مجانية">Get Free Scoop Vouchers</h4>
+    <p data-ar="اشترك للحصول على خصم ٢٠٪ ونكهات موسمية سرية.">Subscribe for a 20% discount and secret seasonal flavours.</p>
+    <form class="subscribe"><label class="sr-only" for="email">Email address</label><input id="email" type="email" placeholder="Enter your email..." data-ar-placeholder="أدخل بريدك الإلكتروني..." required><button aria-label="Subscribe">→</button></form>
+  </div>
+  <small class="copyright">© 2026 Gelato Bliss Inc. All rights reserved.</small>
+</footer>
+
+<script src="assets/app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let items = JSON.parse(localStorage.getItem('gelato-cart-items') || '[]');
+    const summaryList = document.querySelector('#summary-items');
+    const money = val => `$${val.toFixed(2)}`;
+
+    const renderCheckout = () => {
+      const subtotal = items.reduce((sum, i) => sum + i.price, 0);
+      const delivery = items.length ? 2.50 : 0;
+      const tax = subtotal * 0.08;
+
+      if (!items.length) {
+        summaryList.innerHTML = '<p style="color:var(--text);text-align:center;padding:20px">Your cart is empty. Add some scoops first!</p>';
+      } else {
+        summaryList.innerHTML = items.map(item => `
+          <div class="summary-item">
+            <b>${item.name}</b>
+            <strong>${money(item.price)}</strong>
+          </div>
+        `).join('');
+      }
+
+      document.querySelector('#chk-subtotal').textContent = money(subtotal);
+      document.querySelector('#chk-delivery').textContent = money(delivery);
+      document.querySelector('#chk-tax').textContent = money(tax);
+      document.querySelector('#chk-total').textContent = money(subtotal + delivery + tax);
+    };
+
+    renderCheckout();
+
+    document.querySelectorAll('.payment-opt').forEach(opt => opt.addEventListener('click', () => {
+      document.querySelectorAll('.payment-opt').forEach(x => x.classList.remove('active'));
+      opt.classList.add('active');
+    }));
+
+    document.querySelector('#checkout-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const orderNum = 'GB-' + Math.floor(1000 + Math.random() * 9000);
+      const address = e.target.querySelector('input[placeholder*="Evergreen"]').value || 'Your Delivery Address';
+
+      document.querySelector('#order-success-num').textContent = `Order #${orderNum} Placed Successfully!`;
+      document.querySelector('#rec-address').textContent = address;
+
+      document.querySelector('#checkout-view').hidden = true;
+      document.querySelector('#success-view').hidden = false;
+
+      // Clear Cart
+      localStorage.setItem('gelato-cart-items', '[]');
+      const cartB = document.querySelector('.cart b');
+      if (cartB) cartB.textContent = '0';
+
+      if (window.showToast) {
+        window.showToast('Order Placed!', `Order #${orderNum} has been received.`, '🎉', 'success');
+      }
+    });
+  });
+</script>
+</body>
+</html>
