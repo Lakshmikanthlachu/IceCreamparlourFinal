@@ -11,7 +11,7 @@
 .menu-filters button{border:1px solid var(--line,#e9eaf0);border-radius:11px;background:var(--surface,#fff);padding:10px 18px;font-size:13px;font-weight:800;color:var(--ink,#142039);cursor:pointer;transition:.2s}
 .menu-filters button.active,.menu-filters button:hover{color:#fff;background:linear-gradient(100deg,#f63a88,#ff9f00);border-color:transparent;box-shadow:0 4px 12px #f6428033}
 .flavor-card{border:1px solid var(--line,#e9eaf0);border-radius:16px;background:var(--surface,#fff);overflow:hidden;box-shadow:0 4px 12px #202a4207;transition:.2s}
-.flavor-card:hover{transform:translateY(-4px);box-shadow:var(--shadow,0 14px 35px #1c244418)}
+.flavor-card:hover{transform:perspective(900px) rotateX(4deg) rotateY(3deg) translateY(-8px);box-shadow:0 24px 44px #20244224}
 .flavor-card img{display:block;width:100%;height:205px;object-fit:cover}
 .flavor-card>div{padding:16px}
 .flavor-card h3{font:900 19px "Nunito",sans-serif;margin:0 0 8px;color:var(--ink,#142039)}
@@ -49,7 +49,7 @@
 .check-list b{display:block;font:900 16px "Nunito",sans-serif;color:var(--ink,#142039);margin-bottom:3px}
 .chef-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center;margin-top:32px}
 .chef{background:var(--surface,#fff);border:1px solid var(--line,#e9eaf0);border-radius:18px;padding:24px;box-shadow:0 4px 12px #202a4207;transition:.2s}
-.chef:hover{transform:translateY(-4px);box-shadow:var(--shadow,0 14px 35px #1c244418)}
+.chef:hover{transform:perspective(900px) rotateX(4deg) rotateY(-3deg) translateY(-8px);box-shadow:0 24px 44px #20244224}
 .chef img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--pink,#f63886)}
 .chef b{display:block;font:900 18px "Nunito",sans-serif;margin-top:12px;color:var(--ink,#142039)}
 .chef small{font-size:13px;color:var(--text,#536078)}
